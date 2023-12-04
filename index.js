@@ -32,6 +32,9 @@ const client = new MongoClient(uri, {
 
 async function run() {
   try {
+    const bookingsCollection = client
+      .db("Pick-n-DropDB")
+      .collection("bookings");
     const usersCollection = client.db("Pick-n-DropDB").collection("users");
 
     // Store Users to the database
@@ -48,6 +51,13 @@ async function run() {
         res.send({ message: "user exists" });
       }
       // console.log(result);
+    });
+
+    // Store Parcel Booking Data to the Database
+    app.post("/parcelbooking", async (req, res) => {
+      const parcelInfo = req?.body;
+      const result = await bookingsCollection.insertOne(parcelInfo);
+      res.send(result);
     });
 
     // Get user role from mongodb
